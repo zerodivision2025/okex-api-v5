@@ -18,17 +18,17 @@ class SubAccountAPI(Client):
         params = {"ccy": ccy, 'type': type, 'subAcct': subAcct, 'after': after, 'before': before, 'limit': limit}
         return self._request_with_params(GET, BILLs, params)
 
-    def delete(self, pwd, subAcct, apiKey):
-        params = {'pwd': pwd, 'subAcct': subAcct, 'apiKey': apiKey}
-        return self._request_with_params(POST, DELETE, params)
+    # def delete(self, pwd, subAcct, apiKey):
+    #     params = {'pwd': pwd, 'subAcct': subAcct, 'apiKey': apiKey}
+    #     return self._request_with_params(POST, DELETE, params)
 
-    def reset(self, pwd, subAcct, label, apiKey, perm, ip=None):
-        params = {'pwd': pwd, 'subAcct': subAcct, 'label': label, 'apiKey': apiKey, 'perm': perm, 'ip': ip}
+    def reset(self, subAcct, apiKey, label=None, perm=None, ip=None):
+        params = {'subAcct': subAcct, 'apiKey': apiKey, 'label': label, 'perm': perm, 'ip': ip}
         return self._request_with_params(POST, RESET, params)
 
-    def create(self, pwd, subAcct, label, Passphrase, perm=None, ip=None):
-        params = {'pwd': pwd, 'subAcct': subAcct, 'label': label, 'Passphrase': Passphrase, 'perm': perm, 'ip': ip}
-        return self._request_with_params(POST, CREATE, params)
+    # def create(self, pwd, subAcct, label, Passphrase, perm=None, ip=None):
+    #     params = {'pwd': pwd, 'subAcct': subAcct, 'label': label, 'Passphrase': Passphrase, 'perm': perm, 'ip': ip}
+    #     return self._request_with_params(POST, CREATE, params)
 
     def view_list(self, enable=None, subAcct=None, after=None, before=None, limit=None):
         params = {'enable': enable, 'subAcct': subAcct, 'after': after, 'before': before, 'limit': limit}
