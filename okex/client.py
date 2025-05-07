@@ -15,6 +15,8 @@ class Client(object):
         self.use_server_time = use_server_time
         self.flag = flag
         self.client = httpx.Client(base_url=base_api, http2=True)
+        self.async_client = httpx.AsyncClient(base_url=base_api, http2=True,
+                                              limits=httpx.Limits(max_connections=20, max_keepalive_connections=10))
 
     def _request(self, method, request_path, params):
 
@@ -37,18 +39,44 @@ class Client(object):
         # send request
         response = None
 
-        # print("url:", url)
-        # print("headers:", header)
-        # print("body:", body)
-
         if method == c.GET:
             response = self.client.get(url, headers=header)
         elif method == c.POST:
             response = self.client.post(url, data=body, headers=header)
 
         # exception handle
-        # print(response.headers)
+        if not str(response.status_code).startswith('2'):
+            raise exceptions.OkexAPIException(response)
 
+        return response.json()
+
+    async def _request_async(self, method, request_path, params):
+
+        if method == c.GET:
+            request_path = request_path + utils.parse_params_to_str(params)
+        # url
+        url = c.API_URL + request_path
+
+        timestamp = utils.get_timestamp()
+
+        # sign & header
+        if self.use_server_time:
+            timestamp = self._get_timestamp()
+
+        body = json.dumps(params) if method == c.POST else ""
+
+        sign = utils.sign(utils.pre_hash(timestamp, method, request_path, str(body)), self.API_SECRET_KEY)
+        header = utils.get_header(self.API_KEY, sign, timestamp, self.PASSPHRASE, self.flag)
+
+        # send request
+        response = None
+
+        if method == c.GET:
+            response = await self.async_client.get(url, headers=header)
+        elif method == c.POST:
+            response = await self.async_client.post(url, data=body, headers=header)
+
+        # exception handle
         if not str(response.status_code).startswith('2'):
             raise exceptions.OkexAPIException(response)
 
@@ -59,6 +87,12 @@ class Client(object):
 
     def _request_with_params(self, method, request_path, params):
         return self._request(method, request_path, params)
+
+    async def _request_without_params_async(self, method, request_path):
+        return await self._request_async(method, request_path, {})
+
+    async def _request_with_params_async(self, method, request_path, params):
+        return await self._request_async(method, request_path, params)
 
     def _get_timestamp(self):
         url = c.API_URL + c.SERVER_TIMESTAMP_URL
