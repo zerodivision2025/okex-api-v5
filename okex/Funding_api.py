@@ -17,11 +17,6 @@ class FundingAPI(Client):
         params = {'ccy': ccy}
         return self._request_with_params(GET, GET_BALANCES, params)
 
-    # Get Balance Asynchronously
-    async def get_balances_async(self, ccy=None):
-        params = {'ccy': ccy}
-        return await self._request_with_params_async(GET, GET_BALANCES, params)
-
     # Get Account Configuration
     def funds_transfer(self, ccy, amt, froms, to, type='0', subAcct=None, instId=None, toInstId=None, loanTrans=False):
         params = {'ccy': ccy, 'amt': amt, 'from': froms, 'to': to, 'type': type, 'subAcct': subAcct, 'instId': instId,
@@ -72,10 +67,6 @@ class FundingAPI(Client):
     def get_eth_staking_history(self, type=None, status=None, after=None, before=None, limit=None):
         params = {'type': type, 'status': status, 'after': after, 'before': before, 'limit': limit}
         return self._request_with_params(GET, ETH_STAKING_HISTORY, params)
-
-    async def get_eth_staking_history_async(self, type=None, status=None, after=None, before=None, limit=None):
-        params = {'type': type, 'status': status, 'after': after, 'before': before, 'limit': limit}
-        return await self._request_with_params_async(GET, ETH_STAKING_HISTORY, params)
 
     def get_eth_staking_apy_history(self, days=None):
         params = {'days': days}

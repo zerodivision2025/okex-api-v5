@@ -21,13 +21,6 @@ class AccountAPI(Client):
             params['ccy'] = ccy
         return self._request_with_params(GET, ACCOUNT_INFO, params)
 
-    # Get Balance Asynchronously
-    async def get_account_async(self, ccy=None):
-        params = {}
-        if ccy:
-            params['ccy'] = ccy
-        return await self._request_with_params_async(GET, ACCOUNT_INFO, params)
-
     # Get Positions
     def get_positions(self, instType=None, instId=None):
         params = {}
@@ -160,10 +153,3 @@ class AccountAPI(Client):
         if ccy:
             params['ccy'] = ccy
         return self._request_with_params(GET, MAX_WITHDRAWAL, params)
-
-    # Get Maximum Withdrawals Asynchronously
-    async def get_max_withdrawal_async(self, ccy=None):
-        params = {}
-        if ccy:
-            params['ccy'] = ccy
-        return await self._request_with_params_async(GET, MAX_WITHDRAWAL, params)
