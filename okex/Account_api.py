@@ -153,3 +153,7 @@ class AccountAPI(Client):
         if ccy:
             params['ccy'] = ccy
         return self._request_with_params(GET, MAX_WITHDRAWAL, params)
+
+    def move_positions(self, from_account, to_account, legs, client_id):
+        params = {'fromAcct': from_account, 'toAcct': to_account, 'legs': legs, 'clientId': client_id}
+        return self._request_with_params(POST, MOVE_POSITIONS, params)
