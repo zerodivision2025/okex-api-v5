@@ -66,11 +66,17 @@ class TradeAPI(Client):
                   'after': after, 'before': before, 'limit': limit}
         return self._request_with_params(GET, ORDERS_HISTORY_ARCHIVE, params)
 
-    # Get Transaction Details
+    # Get Transaction Details (last 3 days)
     def get_fills(self, instType=None, uly=None, instId=None, ordId=None, after=None, before=None, limit=None):
         params = {'instType': instType, 'uly': uly, 'instId': instId, 'ordId': ordId, 'after': after, 'before': before,
                   'limit': limit}
         return self._request_with_params(GET, ORDER_FILLS, params)
+
+    # Get Transaction Details (last 1 year)
+    def fills_history(self, instType=None, uly=None, instId=None, ordId=None, after=None, before=None, begin=None, end=None, limit=None):
+        params = {'instType': instType, 'uly': uly, 'instId': instId, 'ordId': ordId, 'after': after, 'before': before,
+                  'begin': begin, 'end': end, 'limit': limit}
+        return self._request_with_params(GET, FILLS_HISTORY, params)
 
     # Place Algo Order
     def place_algo_order(self, instId, tdMode, side, ordType, sz, ccy=None, posSide=None, reduceOnly=None, tpTriggerPx=None,
